@@ -1,36 +1,62 @@
-from fastapi import FastAPI, HTTPException, Request, Query
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 import httpx
+import os
+from dotenv import load_dotenv
 
-from utils.header_checker import check_security_headers, summarize_results
+load_dotenv()
 
 app = FastAPI()
 
-class URLRequest(BaseModel):
-    url: str
+# CORS configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Temporarily allow all origins for testing
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/analyze")
-async def analyze_headers(request: URLRequest, details: bool = Query(False)):
+async def analyze(url: str):
     try:
-        async with httpx.AsyncClient(timeout=5.0, follow_redirects=True) as client:
-            response = await client.get(request.url)
-            headers = dict(response.headers)
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            headers = response.headers
 
-        security_report = check_security_headers(headers)
-        summary_message, status = summarize_results(security_report)
+            # Analyze headers for security-related ones
+            security_analysis = {
+                "X-Frame-Options": headers.get("X-Frame-Options"),
+                "Content-Security-Policy": headers.get("Content-Security-Policy"),
+                "Strict-Transport-Security": headers.get("Strict-Transport-Security"),
+                "X-Content-Type-Options": headers.get("X-Content-Type-Options"),
+                "X-XSS-Protection": headers.get("X-XSS-Protection"),
+            }
 
-        result = {
-            "url": request.url,
-            "status_code": response.status_code,
-            "summary": summary_message,
-            "status": status,
-            "security_analysis": security_report
-        }
+            # Check for missing headers
+            missing_headers = [header for header, value in security_analysis.items() if value is None]
 
-        if details:
-            result["raw_headers"] = headers
+            return JSONResponse(content={
+                "status": "success",
+                "summary": f"Missing headers: {', '.join(missing_headers) if missing_headers else 'None'}",
+                "security_analysis": security_analysis,
+                "raw_headers": headers
+            })
 
-        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=400, detail=f"Failed to fetch URL: {str(e)}")
+# Optional: Proxy endpoint to fetch headers from a given URL
+@app.get("/proxy")
+async def proxy(url: str):
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            return JSONResponse(content=response.json())  # Return the response from the target URL
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
