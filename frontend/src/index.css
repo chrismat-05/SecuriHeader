@@ -6,7 +6,6 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -25,7 +24,6 @@ body {
   background: #555;
 }
 
-/* Animation for pulse effect */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
