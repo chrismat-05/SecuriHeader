@@ -53,19 +53,27 @@ With a clean interface and instant results, you can assess how secure your web h
    git clone https://github.com/chrismat-05/securiheader.git
    cd securiheader
     ```
-2. **Frontend Setup:**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-3. **Backend Setup:**
+2. **Start the Backend Server:**
    ```bash
    cd backend
    pip install -r requirements.txt
    python app.py
    ```
-4. **Docker (for full stack):**
+3. **Frontend Setup:**
+   ```bash
+   cd frontend
+   npm install
+   ```
+4. **Create a .env file inside the frontend folder and set your backend URL:**
+   ```
+   VITE_API_BASE_URL=http://localhost:8000
+   ```
+   Replace http://localhost:8000 with your actual backend URL.
+5. **Run the frontend:**
+   ```bash
+   npm run dev
+   ```
+6. **Docker (for full stack):**
 ```bash
    docker-compose up --build
 ```
