@@ -11,7 +11,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,7 +26,6 @@ class UrlRequest(BaseModel):
 @app.post("/analyze")
 async def analyze_url(request: UrlRequest):
     try:
-        # Add https:// if no scheme is provided
         if not request.url.startswith(('http://', 'https://')):
             url_to_analyze = f"https://{request.url}"
         else:
