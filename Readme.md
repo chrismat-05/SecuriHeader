@@ -81,7 +81,7 @@ Please read our [Code of Conduct](/CODE_OF_CONDUCT.md)
 
 ## LICENSE
 This project is licensed under the MIT License.
-See the full license [here](/LICENSE.txt).
+See the full license [here](/LICENSE).
 
 ---
 
