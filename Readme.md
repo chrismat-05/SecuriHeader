@@ -81,7 +81,7 @@ With a clean interface and instant results, you can assess how secure your web h
 ---
 
 ## Contributing
-We welcome contributions from the community!
+I welcome contributions from the community!
 Check out the [Contributing Guidelines](/CONTRIBUTING_GUIDELINES.md)
 Please read our [Code of Conduct](/CODE_OF_CONDUCT.md)
 
