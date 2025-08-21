@@ -1,5 +1,6 @@
 # SecuriHeader
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/685585c4-3a4b-4306-9812-5e1f4f364ed3/deploy-status)](https://app.netlify.com/projects/securiheader/deploys)
+---
 **SecuriHeader** is a tool that analyzes the **HTTP response headers** of any website and checks for missing or misconfigured security-related headers like `X-Frame-Options`, `Content-Security-Policy`, and more.
 It’s ideal for developers, web admins, and security-conscious users looking to audit basic web hygiene.  
 With a clean interface and instant results, you can assess how secure your web headers are with ease.
